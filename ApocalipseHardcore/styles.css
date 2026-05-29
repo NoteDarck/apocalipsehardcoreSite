@@ -1,0 +1,263 @@
+  * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('backgroud.png');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, -apple-system, 'Orbitron', monospace;
+            color: #eef5ff;
+            padding: 2rem 1.5rem;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        /* overlay escuro para dar contraste e destaque aos cards */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1380px;
+            margin: 0 auto;
+        }
+
+        /* ========= HEADER SOMENTE COM A IMAGEM DO BLOCKBENCH ========= */
+        .blockbench-header {
+            margin-bottom: 2.5rem;
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: 0 25px 35px -12px rgba(0,0,0,0.7);
+            transition: transform 0.25s ease, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .blockbench-header:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 40px -12px #000000cc;
+        }
+
+        .hero-image {
+            width: 100%;
+            display: block;
+            transition: all 0.2s;
+        }
+
+        /* badge flutuante de informação rápida (opcional, sem atrapalhar a imagem) */
+        .header-attention {
+            text-align: center;
+            margin-top: 0.8rem;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            font-weight: 500;
+            color: #ffcf9a;
+            text-shadow: 0 1px 4px black;
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .header-attention span {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 0.2rem 1rem;
+            border-radius: 60px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            border-left: 2px solid #ffae42;
+        }
+
+        /* CARDS PRINCIPAIS (modernos, atrativos e com hover refinado) */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0 3rem;
+        }
+
+        .card {
+            background: rgba(12, 16, 26, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 180, 70, 0.35);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 20px 32px -12px rgba(0, 0, 0, 0.6);
+        }
+
+        .card:hover {
+            border-color: #ffae42;
+            transform: translateY(-6px);
+            box-shadow: 0 28px 38px -14px black;
+            background: rgba(16, 20, 32, 0.9);
+        }
+
+        .card-header {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #ffae4244;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+
+        .card-header h2 {
+            font-size: 1.65rem;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            background: linear-gradient(120deg, #fff0cf, #ffcd94);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .card-header .difficulty {
+            background: #2a1e0e;
+            padding: 0.25rem 0.9rem;
+            border-radius: 50px;
+            font-family: monospace;
+            font-weight: bold;
+            color: #ffbe76;
+            font-size: 0.8rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .stat-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px dashed rgba(255, 200, 150, 0.2);
+            padding: 0.65rem 0;
+            font-size: 0.95rem;
+        }
+
+        .stat-label {
+            font-weight: 500;
+            color: #cbd5e6;
+        }
+
+        .stat-value {
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+            color: #ffcf8a;
+        }
+
+        .ammo-badge, .modpack-id {
+            background: #10131fcc;
+            border-radius: 20px;
+            padding: 0.6rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            font-family: monospace;
+            word-break: break-all;
+            border: 1px solid #ffae4233;
+        }
+
+        .accessory-hint {
+            background: #2c2418cc;
+            margin-top: 1rem;
+            padding: 0.6rem;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #f5bc70;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+        }
+
+        .backpack-slot {
+            background: #0e121fe6;
+            border-radius: 20px;
+            padding: 0.8rem 1rem;
+            margin-top: 0.8rem;
+            border-left: 4px solid #e6a157;
+        }
+
+        .server-section {
+            background: linear-gradient(110deg, #0b101ad9, #070b12dd);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border: 1px solid #ffae4266;
+        }
+
+        .code-block {
+            background: #010101cc;
+            font-family: 'Fira Code', monospace;
+            padding: 1rem;
+            border-radius: 1.2rem;
+            font-size: 0.9rem;
+            border: 1px solid #3e362e;
+        }
+
+        .btn-copy {
+            background: none;
+            border: 1px solid #ffae4277;
+            border-radius: 30px;
+            padding: 0.3rem 1rem;
+            color: #ffcd94;
+            font-family: monospace;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .btn-copy:hover {
+            background: #ffae4222;
+            border-color: #ffae42;
+            transform: scale(0.97);
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #2c2f3a;
+            font-size: 0.85rem;
+            color: #9aaec0;
+        }
+
+        kbd {
+            background: #1e1a12;
+            border-radius: 8px;
+            padding: 2px 8px;
+            font-family: monospace;
+            border: 1px solid #ffae4277;
+        }
+
+        @media (max-width: 680px) {
+            body {
+                padding: 1rem;
+            }
+            .card-header h2 {
+                font-size: 1.3rem;
+            }
+            .stat-line {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* efeito de brilho adicional na imagem Blockbench */
+        @keyframes softPulse {
+            0% { filter: drop-shadow(0 0 2px rgba(255, 174, 66, 0.2));}
+            100% { filter: drop-shadow(0 0 8px rgba(255, 174, 66, 0.5));}
+        }

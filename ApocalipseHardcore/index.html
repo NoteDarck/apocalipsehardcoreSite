@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Zero Arsenal · TAC-Zero Apocalypse | Modpack Client + Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            background-image: url('backgroud.png');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Segoe UI', 'Poppins', 'Inter', system-ui, 'Orbitron', monospace;
+            color: #e8e4dc;
+            padding: 2rem 1.5rem;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        /* OVERLAY SUAVE E CLARO - nada de vermelho, apenas escuro suave para contraste */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1380px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* HEADER COM ARTE BLOCKBENCH - sem overlay de cor */
+        .blockbench-header {
+            margin-bottom: 1.5rem;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+            transition: 0.2s ease;
+            background: transparent;
+        }
+
+        .blockbench-header:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 28px 40px -12px black;
+        }
+
+        .hero-image {
+            width: 100%;
+            display: block;
+        }
+
+        /* badges abaixo da imagem - neutro e elegante */
+        .header-attention {
+            text-align: center;
+            margin: 1rem 0 2.5rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .header-attention span {
+            background: rgba(20, 20, 25, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            font-family: monospace;
+            color: #cbd5e6;
+            border-left: 3px solid #7c8a9e;
+            letter-spacing: 0.3px;
+        }
+
+        /* DOIS CARDS PRINCIPAIS - fundo melhorado, sem cores agressivas */
+        .duo-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 1rem 0 2.5rem;
+        }
+
+        .modpack-card {
+            flex: 1;
+            min-width: 280px;
+            background: rgba(18, 20, 24, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(100, 120, 140, 0.4);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 25px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modpack-card:hover {
+            border-color: rgba(160, 180, 200, 0.6);
+            transform: translateY(-5px);
+            background: rgba(25, 28, 34, 0.92);
+            box-shadow: 0 22px 32px -12px black;
+        }
+
+        .card-glow {
+            background: linear-gradient(145deg, rgba(80, 100, 120, 0.05), rgba(0, 0, 0, 0.3));
+            padding: 1.6rem;
+        }
+
+        .card-icon {
+            font-size: 2.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* TÍTULOS - cor neutra elegante, nada de vermelho */
+        .modpack-card h2 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #e0e4e8, #b0c0d0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.3rem;
+        }
+
+        .badge-version {
+            background: rgba(0, 0, 0, 0.6);
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            font-family: monospace;
+            margin: 0.5rem 0 1rem 0;
+            color: #9ab3cc;
+            border: 1px solid rgba(100, 120, 140, 0.5);
+        }
+
+        .info-row {
+            display: flex;
+            gap: 1rem;
+            align-items: baseline;
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed rgba(100, 120, 140, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #a0b5ca;
+            width: 105px;
+            flex-shrink: 0;
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            color: #cfdeef;
+            word-break: break-word;
+        }
+
+        .feature-list {
+            margin-top: 1rem;
+            list-style: none;
+        }
+
+        .feature-list li {
+            margin: 0.55rem 0;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #c5d2e2;
+        }
+
+        .feature-list li::before {
+            content: "✦";
+            color: #8aaec0;
+            font-size: 0.8rem;
+        }
+
+        .detail-note {
+            background: rgba(0, 0, 0, 0.5);
+            margin-top: 1.2rem;
+            padding: 0.7rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            text-align: center;
+            border: 1px solid rgba(100, 120, 140, 0.4);
+            color: #bdc7d4;
+        }
+
+        /* CARDS DE ARMAS E MOCHILA */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0 2.5rem;
+        }
+
+        .card {
+            background: rgba(18, 20, 24, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(100, 120, 140, 0.4);
+            overflow: hidden;
+            transition: all 0.25s;
+        }
+
+        .card:hover {
+            border-color: rgba(140, 160, 180, 0.6);
+            transform: translateY(-3px);
+            background: rgba(25, 28, 34, 0.92);
+        }
+
+        .card-header {
+            background: rgba(10, 12, 16, 0.7);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(100, 120, 140, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .card-header h3 {
+            font-size: 1.45rem;
+            font-weight: 600;
+            background: linear-gradient(120deg, #d0deef, #a0bbd4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .difficulty {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.9rem;
+            border-radius: 50px;
+            font-family: monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #9ab3cc;
+            border: 1px solid rgba(100, 120, 140, 0.5);
+        }
+
+        .card-body {
+            padding: 1.4rem;
+        }
+
+        .stat-line {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed rgba(100, 120, 140, 0.3);
+            padding: 0.6rem 0;
+            font-size: 0.9rem;
+        }
+
+        .stat-label {
+            color: #9aafc4;
+        }
+
+        .stat-value {
+            font-family: monospace;
+            font-weight: 500;
+            color: #d0e2f5;
+        }
+
+        .accessory-hint {
+            background: rgba(0, 0, 0, 0.5);
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.8rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #b8cbdf;
+        }
+
+        .ammo-badge {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 0.8rem;
+            padding: 0.6rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.7rem;
+            border-left: 3px solid #809aaf;
+            color: #c5d5e8;
+        }
+
+        .server-section {
+            background: rgba(18, 20, 24, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(100, 120, 140, 0.4);
+        }
+
+        .server-section h2 {
+            color: #c0d0e0;
+            font-weight: 600;
+        }
+
+        .btn-copy {
+            background: rgba(30, 35, 42, 0.9);
+            border: 1px solid rgba(120, 140, 160, 0.6);
+            border-radius: 30px;
+            padding: 0.3rem 1.2rem;
+            font-family: monospace;
+            color: #c0d0e0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: rgba(100, 120, 140, 0.3);
+            border-color: rgba(160, 180, 200, 0.8);
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(100, 120, 140, 0.3);
+            font-size: 0.8rem;
+            color: #8f9eb0;
+        }
+
+        kbd {
+            background: #1e2228;
+            border-radius: 8px;
+            padding: 2px 10px;
+            font-family: monospace;
+            border: 1px solid rgba(120, 140, 160, 0.5);
+            color: #b8cbdf;
+        }
+
+        @media (max-width: 780px) {
+            .duo-cards {
+                flex-direction: column;
+            }
+            .info-label {
+                width: 85px;
+            }
+            body {
+                padding: 1rem;
+            }
+            .modpack-card h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- CABEÇALHO: ARTE BLOCKBENCH (a imagem contém o título "APOCALIPSE HARDCORE" em vermelho, mas o SITE não adiciona nada em cima) -->
+    <div class="blockbench-header">
+        <img class="hero-image" src="apocalipsehardcore.png" alt="Apocalypse Hardcore - Blockbench Art" 
+             onerror="this.onerror=null; this.src='https://placehold.co/1300x400/1a1c22/aabbcc?text=Apocalypse+Hardcore+TACZERO'; this.style.borderRadius='1.5rem'">
+    </div>
+    <div class="header-attention">
+        <span>🎨 Blockbench Model — TAC:ZERO Identity</span>
+        <span>📦 Modpack Zero-9.1 · Apocalypse Hardcore</span>
+        <span>⚡ Shadow Moses Tactical Division</span>
+    </div>
+
+    <!-- DOIS CARDS PRINCIPAIS: CLIENT E SERVER -->
+    <div class="duo-cards">
+        <!-- Card Client -->
+        <div class="modpack-card">
+            <div class="card-glow">
+                <div class="card-icon">🎮⚡</div>
+                <h2>MODPACK · CLIENT</h2>
+                <div class="badge-version">🟢 PARA JOGAR · VERSÃO ZERO-9.1</div>
+                <div class="info-row">
+                    <span class="info-label">🎯 Foco</span>
+                    <span class="info-value">Experiência hardcore, armas táticas realistas</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🔫 Armas principais</span>
+                    <span class="info-value">Mk23 · .45 ACP · TACZ modern_kinetic</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🎒 Mochila</span>
+                    <span class="info-value">Sophisticated Backpacks + restock automático</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">⚙️ Dificuldade</span>
+                    <span class="info-value">8.1 (Wasteland) → 0.1 (Safe zones)</span>
+                </div>
+                <ul class="feature-list">
+                    <li>Arma HK Mk23 com dano 12, penetração 20%</li>
+                    <li>Munição .45 ACF: MIN 31 | AVG 34 | dano cabeça 175%</li>
+                    <li>Pressione Z para acessórios / Shift Esquerdo na mochila</li>
+                    <li>Texturas Blockbench integradas e imersão total</li>
+                </ul>
+                <div class="detail-note">
+                    💡 <strong>Cliente recomendado:</strong> Forge 1.20.1 + TACZ Zero + Sophisticated Backpacks. Entre no apocalipse!
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Server -->
+        <div class="modpack-card">
+            <div class="card-glow">
+                <div class="card-icon">🌐🔥</div>
+                <h2>MODPACK · SERVER</h2>
+                <div class="badge-version">🟠 VERSÃO SERVER · ZERO-9.1-APOCALYPSE</div>
+                <div class="info-row">
+                    <span class="info-label">🧩 Otimização</span>
+                    <span class="info-value">Multiplayer estável, sincronia TACZ, suporte 20+ players</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">📦 Configurações</span>
+                    <span class="info-value">Dificuldade dinâmica por zona (8.1 / 0.1), loot balanceado</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🛠️ Comandos admin</span>
+                    <span class="info-value">/tacz reload, /backpack sort, /give tacz:45acp</span>
+                </div>
+                <ul class="feature-list">
+                    <li>Configuração pronta para servidor dedicado (4-6GB RAM)</li>
+                    <li>Sincronização de marcações NET: munição (1) e armas (4)</li>
+                    <li>Arquivos de configuração: ammo "tacz:45acp", gunId "tacz:hk_mk23"</li>
+                    <li>Backpacks com suporte a upgrades e filtros para munição</li>
+                </ul>
+                <div class="detail-note">
+                    📡 <strong>Server pack disponível:</strong> Scripts de balanceamento hardcore + fallback de dificuldade.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARDS DE ARMAS E MOCHILA -->
+    <div class="card-grid">
+        <!-- Mk23 -->
+        <div class="card">
+            <div class="card-header">
+                <h3>🔫 Mk23 · Offensive Pistol</h3>
+                <span class="difficulty">⚙️ Difficulty 0.1 (MAX lvl)</span>
+            </div>
+            <div class="card-body">
+                <div class="stat-line"><span class="stat-label">🔸 Tipo</span><span class="stat-value">Fistola Ofensiva</span></div>
+                <div class="stat-line"><span class="stat-label">💥 Dano base</span><span class="stat-value">12 ❤️</span></div>
+                <div class="stat-line"><span class="stat-label">🛡️ Perfuração de Armadura</span><span class="stat-value">20%</span></div>
+                <div class="stat-line"><span class="stat-label">🎯 Dano na cabeça</span><span class="stat-value">175%</span></div>
+                <div class="stat-line"><span class="stat-label">🏃 Velocidade de movimento</span><span class="stat-value">-2.1%</span></div>
+                <div class="stat-line"><span class="stat-label">📦 Munição atual</span><span class="stat-value">Bala .45 ACF · 13/13</span></div>
+                <div class="accessory-hint">⚙️ Pressione Z no Jogo para Acessórios</div>
+                <div class="ammo-badge">🔫 GunId: "tacz:hk_mk23"<br>📦 Pacote Padrão TAC Zero · tacz:modern_kinetic_gun<br>🏷️ Timeless & Classics Guns: Zero · NET: 4 marcações</div>
+                <div style="margin-top: 10px; font-style:italic; font-size:0.75rem;">“Under the truck, old friend. Echo of Shadow Moses.”</div>
+            </div>
+        </div>
+
+        <!-- Munição .45 ACF -->
+        <div class="card">
+            <div class="card-header">
+                <h3>🎯 .45 ACF · TAC Ammo</h3>
+                <span class="difficulty">⚡ Difficulty 8.1</span>
+            </div>
+            <div class="card-body">
+                <div class="stat-line"><span class="stat-label">📊 Média/Min/Max</span><span class="stat-value">MIN 31 | AVG 34</span></div>
+                <div class="stat-line"><span class="stat-label">🔫 Calibre</span><span class="stat-value">Bala 45 ACF · Facote Padrão TAC Zero</span></div>
+                <div class="stat-line"><span class="stat-label">🏷️ ID Técnico</span><span class="stat-value">tacz:ammo · "tacz:45acp"</span></div>
+                <div class="stat-line"><span class="stat-label">🔗 Marcações NET</span><span class="stat-value">1 marcação(ões)</span></div>
+                <div class="stat-line"><span class="stat-label">🎮 Modpack referência</span><span class="stat-value">Timeless & Classics Guns:Zero</span></div>
+                <div class="ammo-badge">📦 Pacote de munição padrão — TACZero Ballistics<br>🔁 Compatível com armas tacz:45acp (HK Mk23, 1911)</div>
+                <div class="accessory-hint">🧨 Dano consistente, penetração moderada · Ideal para wasteland.</div>
+            </div>
+        </div>
+
+        <!-- Mochila Sophisticated Backpacks -->
+        <div class="card">
+            <div class="card-header">
+                <h3>🎒 Mochila Tática · Slot Costas</h3>
+                <span class="difficulty">🗃️ Difficulty 9.1</span>
+            </div>
+            <div class="card-body">
+                <div class="stat-line"><span class="stat-label">📦 Slot</span><span class="stat-value">Costas (Back slot)</span></div>
+                <div class="stat-line"><span class="stat-label">⚙️ Ação</span><span class="stat-value"><kbd>Shift Esquerdo</kbd> ver conteúdo</span></div>
+                <div class="stat-line"><span class="stat-label">📦 Item ID</span><span class="stat-value">sophisticatedbackpacks:backpack</span></div>
+                <div style="background: rgba(0,0,0,0.4); border-radius: 0.8rem; padding: 0.6rem; margin: 0.6rem 0;">
+                    🎒 <strong>Sophisticated Backpacks</strong> · Upgrades, filtros, restock automático de .45 ACP
+                </div>
+                <div class="stat-line"><span class="stat-label">🏷️ TAG</span><span class="stat-value">@back · rede de suporte ao servidor</span></div>
+                <div class="accessory-hint">💼 Dica server: use a mochila para transportar munição TAC Zero e kits médicos.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEÇÃO TÉCNICA SERVIDOR -->
+    <div class="server-section">
+        <h2 style="display: flex; gap: 12px; align-items:center; flex-wrap:wrap;">🌐 Modpack Server · Zero Network <span style="font-size:0.7rem; background:rgba(0,0,0,0.5); padding:4px 14px; border-radius:50px;">Wasteland Mode Active</span></h2>
+        <p style="margin: 0.5rem 0 1rem;">Configurações técnicas para o servidor dedicado: mods compatíveis, comandos e boas práticas para rodar o modpack sem lag e com máxima performance.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
+            <div style="flex:1">
+                <div style="font-weight:bold; color:#9ab3cc;">📁 Pacotes essenciais</div>
+                <ul style="margin-left: 1.2rem; margin-top: 0.3rem; color:#bdc7d4;">
+                    <li>Timeless & Classics Guns: Zero (Server build)</li>
+                    <li>TACZ - Modern Kinetic Gun API</li>
+                    <li>Sophisticated Backpacks (server side)</li>
+                </ul>
+            </div>
+            <div style="flex:1">
+                <div style="font-weight:bold; color:#9ab3cc;">🖥️ Comandos admin</div>
+                <ul style="margin-left: 1.2rem;">
+                    <li><code style="background:#1a1c22; padding:2px 6px; border-radius:6px;">/tacz reload</code> - recarrega munição</li>
+                    <li><code style="background:#1a1c22; padding:2px 6px; border-radius:6px;">/backpack sort</code> - organiza mochilas</li>
+                    <li><code style="background:#1a1c22; padding:2px 6px; border-radius:6px;">/give @p tacz:45acp 64</code></li>
+                </ul>
+            </div>
+        </div>
+        <div style="background:rgba(0,0,0,0.5); border-radius: 1rem; padding: 0.8rem; margin-top: 1rem; font-family: monospace; display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center;">
+            <span>📦 modpack-version = "Zero-9.1-Apocalypse" | api = "tacz:modern_kinetic_gun"</span>
+            <button class="btn-copy" id="copyServerInfo">📋 Copiar versão server</button>
+        </div>
+        <div class="detail-note" style="margin-top: 1rem;">✅ AmmoID: tacz:45acp · GunId: tacz:hk_mk23 · BackpackID: sophisticatedbackpacks:backpack · NET Marks: 4 armas / 1 munição · Dificuldade por zona (8.1 / 0.1).</div>
+    </div>
+
+    <!-- estatísticas rápidas -->
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin: 2rem 0 1rem;">
+        <div style="background: rgba(18, 20, 24, 0.8); backdrop-filter: blur(8px); border-radius: 1rem; padding: 0.8rem 1.2rem; flex:1; border-left: 3px solid #7c8e9e;">
+            <div style="font-size: 0.8rem; color:#9ab3cc;">📊 Dano balístico .45 ACF</div>
+            <div style="font-size: 1.3rem; font-weight: bold; color: #c0d4ea;">MIN 31 | AVG 34 | MAX 38/43*</div>
+        </div>
+        <div style="background: rgba(18, 20, 24, 0.8); backdrop-filter: blur(8px); border-radius: 1rem; padding: 0.8rem 1.2rem; flex:1; border-left: 3px solid #7c8e9e;">
+            <div style="font-size: 0.8rem; color:#9ab3cc;">🎚️ Dificuldade ambiente</div>
+            <div><span style="background:#2a2e36; padding:2px 12px; border-radius:30px;">Hardcore 8.1</span> → <span style="background:#2a3a34; padding:2px 12px; border-radius:30px;">Safe 0.1</span></div>
+        </div>
+        <div style="background: rgba(18, 20, 24, 0.8); backdrop-filter: blur(8px); border-radius: 1rem; padding: 0.8rem 1.2rem; flex:1; border-left: 3px solid #7c8e9e;">
+            <div style="font-size: 0.8rem; color:#9ab3cc;">🏷️ Shadow Moses Legacy</div>
+            <div style="color:#bdc7d4;">Eco tático · Mk23 · .45 ACP</div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <p>⚡ Modpack Zero-9.1 Apocalypse — Duas versões: <strong>CLIENT (para jogar)</strong> e <strong>SERVER (dedicado)</strong>.</p>
+        <p>🎮 Pressione Z para acessórios, Shift Esquerdo na mochila. Fundo escuro ajustado para legibilidade.</p>
+    </div>
+</div>
+
+<script>
+    const copyBtn = document.getElementById('copyServerInfo');
+    if(copyBtn) {
+        copyBtn.addEventListener('click', () => {
+            const serverData = `Zero-9.1-Apocalypse-Server | TACZ: tacz:45acp / tacz:hk_mk23 | SophisticatedBackpacks | Difficulty dynamic 8.1-0.1`;
+            navigator.clipboard.writeText(serverData).then(() => {
+                copyBtn.innerText = '✓ Copiado!';
+                setTimeout(() => { copyBtn.innerText = '📋 Copiar versão server'; }, 2000);
+            }).catch(() => alert("Copie manualmente"));
+        });
+    }
+</script>
+</body>
+</html>
